@@ -46,7 +46,7 @@ function dragEnd(event) {
   event.target.style.cursor = 'grab';
 }
 
-// Convert data to CSV format and download
+// Send coordinates to the server and save them as a CSV file
 function saveCoordinates() {
   // Prepare data to send
   const coordinates = [];
@@ -71,4 +71,3 @@ function saveCoordinates() {
     alert('Error saving data');
   });
 }
-
