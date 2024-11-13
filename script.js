@@ -18,14 +18,20 @@ document.addEventListener('DOMContentLoaded', () => {
     iconElement.classList.add('icon');
     iconElement.innerText = icon;
     iconElement.draggable = true;
-    iconElement.addEventListener('dragstart', dragStart);
+
+    // Remove icon from pool when dragging starts
+    iconElement.addEventListener('dragstart', function (e) {
+      e.target.style.opacity = '0.5';  // Optional: make the dragged icon semi-transparent
+      setTimeout(() => {
+        e.target.style.display = 'none';  // Hide the dragged icon
+      }, 0);
+
+      // Remove the icon from the pool
+      e.target.remove();
+    });
+
     iconsContainer.appendChild(iconElement);
   });
-
-  // Drag Start Event
-  function dragStart(e) {
-    e.dataTransfer.setData('text', e.target.innerText);
-  }
 
   // Allow dropping inside the circle
   circle.addEventListener('dragover', (e) => {
