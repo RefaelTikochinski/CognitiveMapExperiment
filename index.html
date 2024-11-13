@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cognitive Map Experiment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Cognitive Map Experiment</h1>
+  <p>Drag each icon into the circle to indicate its placement in your mental map.</p>
+  
+  <div id="circle-area">
+    <!-- Circle where participants will drop items -->
+    <div id="circle"></div>
+  </div>
+
+  <!-- Icons to drag -->
+  <div id="icon-pool">
+    <div class="icon" id="apple" draggable="true">🍎</div>
+    <div class="icon" id="banana" draggable="true">🍌</div>
+    <div class="icon" id="shoe" draggable="true">👟</div>
+    <div class="icon" id="microscope" draggable="true">🔬</div>
+    <div class="icon" id="car" draggable="true">🚗</div>
+    <div class="icon" id="laptop" draggable="true">💻</div>
+    <div class="icon" id="dog" draggable="true">🐶</div>
+    <div class="icon" id="cat" draggable="true">🐱</div>
+    <div class="icon" id="pizza" draggable="true">🍕</div>
+    <div class="icon" id="tree" draggable="true">🌳</div>
+    <div class="icon" id="book" draggable="true">📚</div>
+    <div class="icon" id="flower" draggable="true">🌸</div>
+    <div class="icon" id="bicycle" draggable="true">🚲</div>
+    <div class="icon" id="camera" draggable="true">📷</div>
+    <div class="icon" id="guitar" draggable="true">🎸</div>
+    <div class="icon" id="coffee" draggable="true">☕</div>
+    <div class="icon" id="clock" draggable="true">⏰</div>
+    <div class="icon" id="phone" draggable="true">📱</div>
+    <div class="icon" id="basketball" draggable="true">🏀</div>
+    <div class="icon" id="bottle" draggable="true">🍾</div>
+    <div class="icon" id="fish" draggable="true">🐟</div>
+    <div class="icon" id="heart" draggable="true">❤️</div>
+    <div class="icon" id="robot" draggable="true">🤖</div>
+    <div class="icon" id="pencil" draggable="true">✏️</div>
+    <div class="icon" id="sun" draggable="true">☀️</div>
+  </div>
+
+  <button onclick="saveCoordinates()">Save</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
