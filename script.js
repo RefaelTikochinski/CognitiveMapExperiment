@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
   });
 
-  // Drop Event
+  // Drop Event: Place the icon inside the circle
   circle.addEventListener('drop', (e) => {
     e.preventDefault();
     const icon = e.dataTransfer.getData('text');
@@ -52,6 +52,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Store the coordinates of the dropped icon
     iconPositions.push({ icon, x: e.offsetX, y: e.offsetY });
+
+    // Enable the item to be draggable again inside the circle
+    iconElement.draggable = true;
+
+    // Drag event to allow moving the item again
+    iconElement.addEventListener('dragstart', function (e) {
+      e.target.style.opacity = '0.5';
+      setTimeout(() => {
+        e.target.style.display = 'none';
+      }, 0);
+    });
+
+    // Drag over event to enable re-positioning within the circle
+    circle.addEventListener('dragover', function (e) {
+      e.preventDefault();
+    });
+
+    // Drop event to update position inside the circle
+    circle.addEventListener('drop', function (e) {
+      e.preventDefault();
+      const draggedIcon = e.target;
+      draggedIcon.style.left = `${e.offsetX - 25}px`;
+      draggedIcon.style.top = `${e.offsetY - 25}px`;
+
+      // Update the coordinates in iconPositions array
+      const index = iconPositions.findIndex(item => item.icon === draggedIcon.innerText);
+      if (index !== -1) {
+        iconPositions[index].x = e.offsetX;
+        iconPositions[index].y = e.offsetY;
+      }
+    });
   });
 
   // Submit button click event
