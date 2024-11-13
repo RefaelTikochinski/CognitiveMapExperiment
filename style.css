@@ -1,44 +1,32 @@
 body {
   font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-#circle-area {
-  position: relative;
-  width: 400px;
-  height: 400px;
-  margin-top: 20px;
+  text-align: center;
 }
 
 #circle {
-  width: 100%;
-  height: 100%;
+  width: 500px;
+  height: 500px;
   border-radius: 50%;
-  border: 3px solid #333;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #f0f0f0; /* Light gray background */
-}
-
-#icon-pool {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
-  width: 250px;
-  justify-content: center;
+  border: 2px solid black;
+  margin: 0 auto;
+  position: relative;
 }
 
 .icon {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
+  background-color: lightgray;
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 24px;
-  cursor: grab;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+  position: absolute;
+  user-select: none;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
 }

@@ -46,24 +46,37 @@ function dragEnd(event) {
   event.target.style.cursor = 'grab';
 }
 
-// Convert data to CSV format and download
+// Send coordinates to the server and save them to GitHub
 function saveCoordinates() {
-  // Create CSV data
-  let csvContent = "data:text/csv;charset=utf-8,";
-  csvContent += "Icon,Relative X,Relative Y\n"; // CSV header
+  // Get the participant's ID
+  const participantId = document.getElementById('participant-id').value;
 
+  if (!participantId) {
+    alert('Please enter your last 4 digits of ID.');
+    return;
+  }
+
+  // Prepare data to send
+  const coordinates = [];
   Object.keys(iconCoordinates).forEach(iconId => {
     const { x, y } = iconCoordinates[iconId];
-    csvContent += `${iconId},${x},${y}\n`;
+    coordinates.push({ id: iconId, x: x, y: y });
   });
 
-  // Create a downloadable link for the CSV file
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "cognitive_map_coordinates.csv");
-  document.body.appendChild(link); // Required for Firefox
-
-  link.click();
-  document.body.removeChild(link); // Clean up the link element
+  // Send data to the server via POST request, including the ID in the filename
+  fetch(`/save-coordinates/${participantId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(coordinates),
+  })
+  .then(response => response.json())
+  .then(data => {
+    alert('Data saved successfully!');
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error saving data');
+  });
 }
