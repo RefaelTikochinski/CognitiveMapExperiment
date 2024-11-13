@@ -22,4 +22,4 @@ jobs:
           echo "${{ github.event.client_payload.participantId }},$icon,$x,$y" >> data/${{ github.event.client_payload.participantId }}.csv
         done
       env:
-        GITHUB_TOKEN: ${{ secrets.MYTOKEN }}
+        GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
