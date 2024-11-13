@@ -7,24 +7,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Cognitive Map Experiment</h1>
-  
-  <!-- Input for participant's last 4 digits of ID -->
-  <div>
-    <label for="participant-id">Enter your last 4 digits of ID:</label>
-    <input type="text" id="participant-id" maxlength="4" pattern="[0-9]{4}" required>
-  </div>
-  
-  <div id="circle">
-    <div class="icon" id="apple" draggable="true">🍎</div>
-    <div class="icon" id="banana" draggable="true">🍌</div>
-    <div class="icon" id="shoe" draggable="true">👟</div>
-    <div class="icon" id="microscope" draggable="true">🔬</div>
-    <!-- Add more icons here -->
+  <div class="container">
+    <div class="header">
+      <h1>Cognitive Map Experiment</h1>
+      <label for="participantId">Enter your ID (last 4 digits):</label>
+      <input type="text" id="participantId" maxlength="4" placeholder="e.g. 1234" required>
+    </div>
+    <div class="icons">
+      <!-- Icons will be dynamically inserted here -->
+    </div>
+    <div class="circle">
+      <!-- This will be the large circle where icons will be dragged and dropped -->
+    </div>
+    <button id="submitBtn">Submit Data</button>
   </div>
 
-  <button onclick="saveCoordinates()">Save Coordinates</button>
-  
   <script src="script.js"></script>
 </body>
 </html>
