@@ -47,6 +47,8 @@ function dragEnd(event) {
 }
 
 // Send coordinates to the server and save them as a CSV file
+
+
 function saveCoordinates() {
   // Prepare data to send
   const coordinates = [];
@@ -54,6 +56,8 @@ function saveCoordinates() {
     const { x, y } = iconCoordinates[iconId];
     coordinates.push({ id: iconId, x: x, y: y });
   });
+
+  console.log('Sending coordinates:', coordinates); // Log data to check
 
   // Send data to the server via POST request
   fetch('/save-coordinates', {
@@ -68,6 +72,7 @@ function saveCoordinates() {
     alert('Data saved successfully!');
   })
   .catch(error => {
+    console.error('Error:', error); // Log error to the console
     alert('Error saving data');
   });
 }
