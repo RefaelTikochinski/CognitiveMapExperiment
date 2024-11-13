@@ -1,25 +1,36 @@
-name: Save Data to CSV
+name: Save Data from Participants
 
 on:
   repository_dispatch:
     types: [save-coordinates]
 
 jobs:
-  save-to-csv:
+  save_data:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Save coordinates to CSV
-      run: |
-        echo "participantId,icon,x,y" > data/${{ github.event.client_payload.participantId }}.csv
-        for item in "${{ github.event.client_payload.iconPositions }}"; do
-          icon=$(echo $item | jq -r '.icon')
-          x=$(echo $item | jq -r '.x')
-          y=$(echo $item | jq -r '.y')
-          echo "${{ github.event.client_payload.participantId }},$icon,$x,$y" >> data/${{ github.event.client_payload.participantId }}.csv
-        done
-      env:
-        GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install necessary libraries
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas
+
+      - name: Save data to CSV
+        run: |
+          python save_data.py
+
+      - name: Commit data and push
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: 'data/'
+          message: 'Add new participant data'
+          author_name: 'your-username'
+          author_email: 'your-email@example.com'
+          token: ${{ secrets.MY_TOKEN }}
