@@ -1,0 +1,25 @@
+name: Save Data to CSV
+
+on:
+  repository_dispatch:
+    types: [save-coordinates]
+
+jobs:
+  save-to-csv:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Save coordinates to CSV
+      run: |
+        echo "participantId,icon,x,y" > data/${{ github.event.client_payload.participantId }}.csv
+        for item in "${{ github.event.client_payload.iconPositions }}"; do
+          icon=$(echo $item | jq -r '.icon')
+          x=$(echo $item | jq -r '.x')
+          y=$(echo $item | jq -r '.y')
+          echo "${{ github.event.client_payload.participantId }},$icon,$x,$y" >> data/${{ github.event.client_payload.participantId }}.csv
+        done
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
