@@ -101,8 +101,32 @@
       });
     }
 
+    // Save data to Google Drive via Google Apps Script Web App
+    async function saveData(participantId, csvData) {
+      const webAppUrl = "YOUR_WEB_APP_URL"; // Replace with your Google Apps Script URL
+
+      const response = await fetch(webAppUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          participantId: participantId,
+          csvContent: csvData,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert("Data saved successfully!");
+      } else {
+        alert("Error saving data: " + result.message);
+      }
+    }
+
     document.getElementById("finish-btn").addEventListener("click", () => {
       const data = [];
+      const participantId = prompt("Please enter your Participant ID:");
 
       document.querySelectorAll(".draggable").forEach((item) => {
         const rect = item.getBoundingClientRect();
@@ -121,18 +145,12 @@
 
       console.log("Participant Data:", data);
 
-      // Convert data to CSV
+      // Convert data to CSV format
       const csvContent = "data:text/csv;charset=utf-8," +
         data.map(d => `${d.concept},${d.x},${d.y}`).join("\n");
 
-      // Download CSV
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "spam_task_results.csv");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Save data to Google Drive
+      saveData(participantId, csvContent);
     });
   </script>
 </body>
