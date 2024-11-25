@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch('https://api.github.com/repos/your-username/your-repository/dispatches', {
         method: 'POST',
         headers: {
-          'Authorization': `token YOUR_GITHUB_TOKEN`,
+          'Authorization': `token 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`,
           'Accept': 'application/vnd.github.v3+json',
           'Content-Type': 'application/json'
         },
