@@ -1,157 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SpAM Task</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
+    <title>SpAM Task</title>
+    <script>
+        // Function to collect the data and send it to Google Apps Script
+        function saveToDrive() {
+            // Get the entered participant ID
+            var participantId = document.getElementById('participantId').value;
+            if (!participantId) {
+                alert('Please enter your participant ID.');
+                return; // Stops the function if ID is missing
+            }
 
-    #circle {
-      width: 600px;
-      height: 600px;
-      margin: 50px auto;
-      border: 2px dashed gray;
-      border-radius: 50%;
-      position: relative;
-      background-color: #f9f9f9;
-    }
+            // Prepare the CSV content from the drag-and-drop results (this is where you collect the data)
+            var csvContent = "concept,x,y\n";
 
-    .draggable {
-      width: 50px;
-      height: 50px;
-      position: absolute;
-      cursor: grab;
-      text-align: center;
-      line-height: 50px;
-      border-radius: 50%;
-      border: 1px solid black;
-      background-color: #ffcccb;
-    }
+            // Example: Collect item positions from the draggable items
+            // This is a placeholder - replace this with actual item data
+            var itemPositions = [
+                { concept: "Apple", x: 100, y: 200 },
+                { concept: "Banana", x: 150, y: 250 },
+                { concept: "Car", x: 200, y: 300 },
+                { concept: "Shoes", x: 250, y: 350 }
+            ];
 
-    #instructions {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
+            // Build the CSV string
+            itemPositions.forEach(function(item) {
+                csvContent += item.concept + "," + item.x + "," + item.y + "\n";
+            });
 
-    #finish-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
-  </style>
+            // Send the data to the Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbzoOgmBTzM8VxI3KPHecs3c3yrB68UDxjPr1YvMTD7qJGHPFAVWX39cLeNQUoNVsxdw/exec', {  // Replace this with your actual Apps Script URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    participantId: participantId,
+                    csvContent: csvContent
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Data successfully saved to Google Drive!');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('Error saving data: ' + error.message);
+            });
+        }
+    </script>
 </head>
 <body>
-  <h1>Spatial Arrangement Method (SpAM) Task</h1>
-  <div id="instructions">Drag the items into the circle to arrange them based on similarity. When finished, click "Submit".</div>
-  <div id="circle"></div>
-  <button id="finish-btn">Submit</button>
-
-  <script>
-    // Example concepts
-    const concepts = ["Apple", "Banana", "Car", "Tree", "Book", "Phone", "Dog", "Microscope"];
-    const circle = document.getElementById("circle");
-
-    // Place concepts randomly outside the circle
-    concepts.forEach((concept, index) => {
-      const item = document.createElement("div");
-      item.className = "draggable";
-      item.textContent = concept;
-      item.setAttribute("data-concept", concept);
-
-      // Random starting position outside the circle
-      item.style.left = `${Math.random() * 800}px`;
-      item.style.top = `${Math.random() * 200}px`;
-
-      document.body.appendChild(item);
-
-      // Make the item draggable
-      makeDraggable(item);
-    });
-
-    function makeDraggable(item) {
-      let offsetX, offsetY;
-
-      item.addEventListener("mousedown", (e) => {
-        offsetX = e.offsetX;
-        offsetY = e.offsetY;
-        item.style.cursor = "grabbing";
-
-        function onMouseMove(event) {
-          item.style.left = `${event.pageX - offsetX}px`;
-          item.style.top = `${event.pageY - offsetY}px`;
-        }
-
-        document.addEventListener("mousemove", onMouseMove);
-
-        item.addEventListener("mouseup", () => {
-          document.removeEventListener("mousemove", onMouseMove);
-          item.style.cursor = "grab";
-        }, { once: true });
-      });
-    }
-
-    // Save data to Google Drive via Google Apps Script Web App
-    async function saveData(participantId, csvData) {
-      const webAppUrl = "https://script.google.com/macros/s/AKfycbzoOgmBTzM8VxI3KPHecs3c3yrB68UDxjPr1YvMTD7qJGHPFAVWX39cLeNQUoNVsxdw/exec"; // Replace with your Google Apps Script URL
-
-      const response = await fetch(webAppUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          participantId: participantId,
-          csvContent: csvData,
-        }),
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        alert("Data saved successfully!");
-      } else {
-        alert("Error saving data: " + result.message);
-      }
-    }
-
-    document.getElementById("finish-btn").addEventListener("click", () => {
-      const data = [];
-      const participantId = prompt("Please enter your Participant ID:");
-
-      document.querySelectorAll(".draggable").forEach((item) => {
-        const rect = item.getBoundingClientRect();
-        const circleRect = circle.getBoundingClientRect();
-
-        // Calculate x, y coordinates relative to the circle's center
-        const x = rect.left + rect.width / 2 - (circleRect.left + circleRect.width / 2);
-        const y = rect.top + rect.height / 2 - (circleRect.top + circleRect.height / 2);
-
-        data.push({
-          concept: item.getAttribute("data-concept"),
-          x: Math.round(x),
-          y: Math.round(y),
-        });
-      });
-
-      console.log("Participant Data:", data);
-
-      // Convert data to CSV format
-      const csvContent = "data:text/csv;charset=utf-8," +
-        data.map(d => `${d.concept},${d.x},${d.y}`).join("\n");
-
-      // Save data to Google Drive
-      saveData(participantId, csvContent);
-    });
-  </script>
+    <h1>SpAM Task</h1>
+    <label for="participantId">Enter your participant ID:</label>
+    <input type="text" id="participantId" required>
+    <br><br>
+    <button onclick="saveToDrive()">Submit</button>
 </body>
 </html>
